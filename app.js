@@ -44,8 +44,6 @@ const appTimer = () => {
     } else{
         isRunning = false;
         Btn.innerHTML = "resume";
-        container.appendChild(reset);
-
         clearInterval(myInterval);
     }
 }
