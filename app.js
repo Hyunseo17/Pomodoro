@@ -1,38 +1,52 @@
 const bells = new Audio('./sounds/Golden-Ringtone.wav');
-const startBtn = document.querySelector('.btn-start');
-const session = document.querySelector('.minutes');
-let myInterval;
-let state = true;
+const Btn = document.querySelector('.btn')
+const min = document.querySelector('.minutes')
+const sec = document.querySelector('.seconds')
+
+let myInterval
+let isRunning = false;
+let total = 0;
 
 const appTimer = () => {
-    const sessionAmount = Number.parseInt(session.textContent)
-    if(state){
-        state = false;
-        let totalSeconds = sessionAmount * 60
+    // check if the program is running already
+    if(!isRunning){
+        isRunning = true;
+        // changes button from start -> pause
+        Btn.innerHTML = "pause"
+
+        // initialize the timer
+        if(total === 0){
+            total = Number.parseInt(min.textContent) * 60
+        }
+        
+
         const updateSeconds = () => {
-            const minuteDiv = document.querySelector('.minutes');
-            const secondDiv = document.querySelector('.seconds');
-          
-            totalSeconds--;
-          
-            let minutesLeft = Math.floor(totalSeconds/60);
-            let secondsLeft = totalSeconds % 60;
-          
-            if(secondsLeft < 10) {
-              secondDiv.textContent = '0' + secondsLeft;
-            } else {
-              secondDiv.textContent = secondsLeft;
-            }
-            minuteDiv.textContent = `${minutesLeft}`
-          
-            if(minutesLeft === 0 && secondsLeft === 0) {
-              bells.play()
-              clearInterval(myInterval);
+            //Counts down the seconds on the timer
+            total--;
+            let minutesLeft = Math.floor(total/60);
+            let secondsLeft = total % 60;
+
+            min.textContent = `${minutesLeft}`;
+            // ? ternery operator that acts like an if else statement
+            sec.textContent = secondsLeft < 10 ? '0' + secondsLeft : secondsLeft;
+
+            if(minutesLeft === 0 && secondsLeft === 0){
+                bells.play();
+                //????????
+                clearInterval(myInterval)
+                isRunning = false;
+                Btn.innerHTML = "start";
+                total = 0;
             }
         }
-        myInterval = setInterval(updateSeconds,1000)
+        // ??????
+        myInterval = setInterval(updateSeconds, 1000)
     } else{
-        alert('Session has already started.')
+        isRunning = false;
+        Btn.innerHTML = "resume";
+        container.appendChild(reset);
+
+        clearInterval(myInterval);
     }
 }
-startBtn.addEventListener('click', appTimer);
+Btn.addEventListener('click', appTimer);
